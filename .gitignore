@@ -1,0 +1,11 @@
+.idea
+operator
+!cmd/operator
+release
+
+tmp.yml
+*.out
+coverage
+*.exe
+tmp
+main
