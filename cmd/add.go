@@ -16,6 +16,7 @@ limitations under the License.
 package cmd
 
 import (
+	"github.com/SimonBaeumer/monorepo-operator/operator"
 	"github.com/SimonBaeumer/monorepo-operator/operator/add"
 	"github.com/spf13/cobra"
 )
@@ -26,14 +27,20 @@ var addCmd = &cobra.Command{
 	Short: "A brief description of your command",
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		//cmd.
-		add.AddFromPath()
+		a := add.AddArgs{
+			DryRun: true,
+			Path: args[1],
+			GitBaseUrl: args[0],
+		}
+		mono := operator.MonoRepo{}
+		add.AddFromPath(mono, a)
 	},
 }
 
 func init() {
 	rootCmd.AddCommand(addCmd)
 
+	addCmd.Flags().BoolP("dry-run", "d", false, "Use for testing a init run.")
 	// Here you will define your flags and configuration settings.
 
 	// Cobra supports Persistent Flags which will work for this command

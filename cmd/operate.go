@@ -1,9 +1,9 @@
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/SimonBaeumer/monorepo-operator/operator"
 	"github.com/spf13/cobra"
+	"strings"
 )
 
 // operateCmd represents the operate command
@@ -12,7 +12,12 @@ var operateCmd = &cobra.Command{
 	Short: "Execute a command on your git repositories",
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		fmt.Println("operate called")
+		m, err := operator.NewMonoRepo()
+		if err != nil {
+			panic(err.Error())
+		}
+
+		m.Exec(strings.Join(args, " "))
 	},
 }
 

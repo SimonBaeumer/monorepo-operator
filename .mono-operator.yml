@@ -1,0 +1,8 @@
+projects:
+- name: test
+  path: tmp/test
+  giturl: https://github.com/SimonBaeumer/test
+- name: test2
+  path: tmp/test2
+  giturl: https://github.com/SimonBaeumer/test2
+operating-directory: tmp/
