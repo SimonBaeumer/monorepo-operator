@@ -4,6 +4,8 @@ go 1.12
 
 require (
 	cloud.google.com/go v0.46.3 // indirect
+	github.com/SimonBaeumer/cmd v1.0.0
+	github.com/SimonBaeumer/commander v1.2.1
 	github.com/alecthomas/units v0.0.0-20190910110746-680d30ca3117 // indirect
 	github.com/coreos/bbolt v1.3.3 // indirect
 	github.com/coreos/etcd v3.3.15+incompatible // indirect
@@ -51,4 +53,5 @@ require (
 	google.golang.org/genproto v0.0.0-20190916214212-f660b8655731 // indirect
 	google.golang.org/grpc v1.23.1 // indirect
 	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15 // indirect
+	gopkg.in/yaml.v2 v2.2.2
 )
