@@ -3,28 +3,20 @@ package cmd
 import (
   "fmt"
   "github.com/spf13/cobra"
-  "os"
-
   "github.com/spf13/viper"
+  "os"
 )
 
 
 var cfgFile string
 var debug bool
+const ConfigFile = ".monorepo-operator.yml"
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
   Use:   "monorepo-operator",
   Short: "Manage your monolithic repo and subtree splits",
-  Long: `A longer description that spans multiple lines and likely contains
-examples and usage of using your application. For example:
-
-Cobra is a CLI library for Go that empowers applications.
-This application is a tool to generate the needed files
-to quickly create a Cobra application.`,
-  // Uncomment the following line if your bare application
-  // has an action associated with it:
-  //	Run: func(cmd *cobra.Command, args []string) { },
+  Long: ``,
 }
 
 // Execute adds all child commands to the root command and sets flags appropriately.
@@ -39,11 +31,7 @@ func Execute() {
 func init() {
   cobra.OnInitialize(initConfig)
 
-  // Here you will define your flags and configuration settings.
-  // Cobra supports persistent flags, which, if defined here,
-  // will be global for your application.
-
-  rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is .monorepo-operator.yaml)")
+  rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is .monorepo-operator.yml)")
   rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "")
 
   // Cobra also supports local flags, which will only run
@@ -58,16 +46,9 @@ func initConfig() {
     // Use config file from the flag.
     viper.SetConfigFile(cfgFile)
   } else {
-    // Find wd directory.
-    wd, err := os.Getwd()
-    if err != nil {
-      fmt.Println(err)
-      os.Exit(1)
-    }
-
     // Search config in wd directory with name ".monorepo-operator" (without extension).
-    viper.AddConfigPath(wd)
-    viper.SetConfigName(".monorepo-operator")
+    viper.AddConfigPath(".")
+    viper.SetConfigName(ConfigFile)
   }
 
   viper.AutomaticEnv() // read in environment variables that match
@@ -77,4 +58,3 @@ func initConfig() {
     fmt.Println("Using config file:", viper.ConfigFileUsed())
   }
 }
-

@@ -12,7 +12,7 @@ var operateCmd = &cobra.Command{
 	Short: "Execute a command on your git repositories",
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
-		m, err := operator.NewMonoRepo(".mono-operator.yml")
+		m, err := operator.NewMonoRepo(ConfigFile)
 		if err != nil {
 			panic(err.Error())
 		}

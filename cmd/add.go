@@ -32,7 +32,9 @@ var addCmd = &cobra.Command{
 			Path: args[1],
 			GitBaseUrl: args[0],
 		}
-		mono := operator.MonoRepo{}
+		mono := operator.MonoRepo{
+			ConfigFile: cfgFile,
+		}
 		add.AddFromPath(mono, a)
 	},
 }
