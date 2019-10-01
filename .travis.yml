@@ -10,7 +10,7 @@ stages:
   - deploy
 
 go:
-  - 1.12.x
+  - 1.13.x
 
 sudo: required
 dist: trusty
@@ -26,20 +26,20 @@ jobs:
     - name: Unit tests
       script: make test
 
-#    - stage: deploy
-#      name: "Deployment"
-#      if: tag IS present
-#      script: make release
-#      deploy:
-#        provider: releases
-#        overwrite: true
-#        api_key:
-#          secure: pHsyDlWCuO0mCzR/OrEl7ulVsq98eu/cW0uLkqjK+72maQi/Hp2981mNfyprQ0RQNFMBMK3V0D3ziXyq04ENlwqt8cHiW8+pghRrgDlNzBLIQAXhXCyFprBng2fKrme6L28uRCGJCDVKMrkWI67bVSIQ6EbUbxzAa8egerRtyFEr/iCVs0LqBn1JJjgnCCG4y6fBR54ry5iGOod1nbmd2trGi+MvCjVt5VLeI+s3GTf9EKKl2gDs17BBlvOScSbdKuAWrBP0+lDqwN8EgxZczNwBHM7/NAyHblhJfSkkyGjuUuJo6sxaxnsN8cVpXdIZyGTjsqsbpu1f6OojqQlFRnlSuvQahdnTrVBcqXuMt3qjW7WDKpE4r4Av6OVh3jhAcW68J9rvsQMjDv4BbDim4zOgq13gIbCk5nN+Ny6j6diwgA35iGpKMHRVl6Aq4Nt/RUbQ9TGrVfdYbide+ONyo3WsQvPFJ8iWwMg7EHul4513Pe7RfxGcxCMjbh/rVCIkOrd8e+k6GJ4ngtcODcJjVjJEttvFrJ2EPnL4AYuDbRThgFBcn4j2U7jBmYbNzH2RJrfIRq6WVPwjbVJ2crT8YqkbS16JpcFFVja1r4+LsdMgsBI26c0RDpL08mCLjy8DFW3bAcGb9Myr5dxEYn+qou6LrSCw1I2qNRS/zSdifAo=
-#        file:
-#          - release/commander-linux-amd64
-#          - release/commander-linux-arm
-#          - release/commander-linux-386
-#        skip_cleanup: true
-#        on:
-#          repo: SimonBaeumer/commander
-#          tags: true
+    - stage: deploy
+      name: "Deployment"
+      if: tag IS present
+      script: make release
+      deploy:
+        provider: releases
+        overwrite: true
+        api_key:
+          secure: amZy46LUflpI5nKCaqG05bAHAqLmcUXQkoTK450wp17a7wCrH54JVsQFsMfsEn2Cl41Pa1pZ7BBu1yAF/BjOg/M2tsnQT1f48sq5bPVfdnBwAjirGx0CIAtl9rV3oNH5G8kQJGDXJVV6tuElebJVgdJ5aq1+PHSzw0EaJdq27stvjtDSYq5eyQrKn7sa5C9gH92fuDS4zg10LR34MPSUUVPoC2qZl66Ft0zP5ym3Ilmes+mABj+cfjLt3X1z/+Kt0toqhE0eQnOYmu/B3r6Ph+9oKfUesFwkdpo+9xgNgQiEAYvTF79b6uhYNRPNxEyTINx5DJP6s8S3B9AvqgWu20Ly1pMo9q8XZZYrQgjzGCpMKmAZAi/6XfDPqgmDFJmPye23dnK1PtASdHWFKideDPopozovsVcBwWqSkZS+yV6UzTLJPo+XTh3z+h7SkbKoNbSeFQn0EObXc9nqhik5HbwCkqxkrlIGDl2qKtbPO4chWB8c0usXY/X2C5wydKZkoueH/Zu+79HWs4sO4czJ9SZC2hyU9cVcnDDVn3/N/ztrLK649puJlIc57zGCJ7iAEOnvf4ciiJh4/C+HaiePpkt2kyxYe0qc5XF42t39JnI29y/WpPq98I8kvpS545k2kUtQZSNGVPR/yrRI8WeBhSPtAuJcNEm+uGyDlkh+t+M=
+        file:
+          - release/monorepo-operator-linux-amd64
+          - release/monorepo-operator-linux-arm
+          - release/monorepo-operator-linux-386
+        skip_cleanup: true
+        on:
+          repo: SimonBaeumer/monorepo-operator
+          tags: true

@@ -8,8 +8,8 @@ import (
 
 // operateCmd represents the operate command
 var operateCmd = &cobra.Command{
-	Use:   "operate",
-	Short: "Execute a command on your git repositories",
+	Use:   "exec",
+	Short: "Execute a command on all your projects",
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		m, err := operator.NewMonoRepo(ConfigFile)
