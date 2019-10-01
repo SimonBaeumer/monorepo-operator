@@ -1,5 +1,4 @@
 .idea
-operator
 !cmd/operator
 release
 

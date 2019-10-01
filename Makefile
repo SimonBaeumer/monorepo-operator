@@ -1,5 +1,5 @@
-exe = cmd/operator/*
-cmd = operator
+exe = main.go
+cmd = monorepo-operator
 TRAVIS_TAG ?= "0.0.0"
 
 .PHONY: deps lint test integration integration-windows git-hooks init
@@ -42,4 +42,4 @@ release-386:
 	$(info INFO: Starting build $@)
 	CGO_ENABLED=0 GOOS=linux GOARCH=386 go build -ldflags "-X main.version=$(TRAVIS_TAG) -s -w" -o release/$(cmd)-linux-386 $(exe)
 
-release: release-amd64 release-arm release-386 release-darwin-amd64 release-darwin-386 release-windows-amd64 release-windows-386
+release: release-amd64 release-arm release-386

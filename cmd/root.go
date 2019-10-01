@@ -31,12 +31,8 @@ func Execute() {
 func init() {
   cobra.OnInitialize(initConfig)
 
-  rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is .monorepo-operator.yml)")
+  rootCmd.PersistentFlags().StringVar(&cfgFile, "config", ConfigFile, "config file (default is .monorepo-operator.yml)")
   rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "")
-
-  // Cobra also supports local flags, which will only run
-  // when this action is called directly.
-  rootCmd.Flags().BoolP("toggle", "t", false, "Help message for toggle")
 }
 
 
