@@ -68,3 +68,15 @@ projects:
 # the exec command executes all commands on all directories located under the operating dir
 operating-directory: .git/.subtree-repos
 ```
+
+## Development
+
+### ToDo
+
+ - Testing sync process
+ - Lock and Unlock projects while executing commands
+ - Adding more unit tests
+ - Post and Pre-Hooks
+    - Split
+    - Push
+    - Exec
