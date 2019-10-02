@@ -1,16 +1,16 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/SimonBaeumer/monorepo-operator/operator"
 	"github.com/spf13/cobra"
 	"log"
-	"strings"
 )
 
-// projectExecCmd represents the exec command
-var projectExecCmd = &cobra.Command{
-	Use:   "exec [project] [command]",
-	Short: "Executes a single command on a given project",
+// projectSplitCmd represents the projectSplit command
+var projectSplitCmd = &cobra.Command{
+	Use:   "split [project]",
+	Short: "Create a subtree of a project",
 	Long: ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		m, err := operator.NewMonoRepo(cfgFile)
@@ -23,10 +23,11 @@ var projectExecCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		m.ExecOnProject(p, strings.Join(args[1:], " "))
+		sha1 := m.SplitProject(p, "")
+		fmt.Println(sha1)
 	},
 }
 
 func init() {
-	projectCmd.AddCommand(projectExecCmd)
+	projectCmd.AddCommand(projectSplitCmd)
 }
