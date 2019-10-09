@@ -44,7 +44,7 @@ release-386:
 
 release-mac-amd64:
 	$(info INFO: Starting build $@)
-	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags "-X main.version=$(TRAVIS_TAG) -s -w" -o release/$(cmd)-macos-amd64 $(exe)
+	CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags "-X main.version=$(TRAVIS_TAG) -s -w" -o release/$(cmd)-mac-amd64 $(exe)
 
 release-windows-amd64:
 	$(info INFO: Starting build $@)
