@@ -7,6 +7,7 @@ import (
 	"log"
 )
 
+var useForce = false
 // syncCmd represents the sync command
 var syncCmd = &cobra.Command{
 	Use:   "sync [branch]",
@@ -24,10 +25,12 @@ var syncCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		m.Sync(args[0])
+		m.Sync(args[0], useForce)
 	},
 }
 
 func init() {
+	syncCmd.Flags().BoolVarP(&useForce, "force", "f", false, "this will use the force flag in git push")
+
 	rootCmd.AddCommand(syncCmd)
 }

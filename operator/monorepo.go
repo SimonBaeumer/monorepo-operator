@@ -118,8 +118,11 @@ func (m *MonoRepo) Clone() error {
 
 // Sync will create subtrees of all projects and create a branch for it
 // after that it will be pushed to the remote destination
-func (m *MonoRepo) Sync(branch string) {
-
+func (m *MonoRepo) Sync(branch string, useForce bool) {
+    forceFlag := ""
+    if useForce {
+        forceFlag = "-f"
+    }
     for _, p := range m.Projects {
         splitBranch := fmt.Sprintf("%s-%s", p.Name, branch)
 
@@ -137,7 +140,7 @@ func (m *MonoRepo) Sync(branch string) {
         // Push project from the split branch to the configured branch
         fmt.Printf("> push project %s\n", p.Name)
         pushCmd := newCommand(
-            fmt.Sprintf("git push %s %s:%s", p.Name, splitBranch, branch),
+            fmt.Sprintf("git push %s %s %s:%s", forceFlag, p.Name, splitBranch, branch),
             cmd.WithStandardStreams)
         m.exec(pushCmd)
 
