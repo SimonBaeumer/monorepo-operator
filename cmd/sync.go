@@ -30,7 +30,7 @@ var syncCmd = &cobra.Command{
 }
 
 func init() {
-	syncCmd.Flags().BoolVarP(&useForce, "force", "f", false, "this will use the force flag in git commands")
+	syncCmd.Flags().BoolVarP(&useForce, "force", "f", false, "this will use the force flag in git push")
 
 	rootCmd.AddCommand(syncCmd)
 }
