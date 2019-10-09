@@ -39,6 +39,9 @@ jobs:
           - release/monorepo-operator-linux-amd64
           - release/monorepo-operator-linux-arm
           - release/monorepo-operator-linux-386
+          - release/monorepo-operator-mac-amd64
+          - release/monorepo-operator-windows-amd64.exe
+          - release/monorepo-operator-windows-386.exe
         skip_cleanup: true
         on:
           repo: SimonBaeumer/monorepo-operator
