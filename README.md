@@ -4,6 +4,7 @@ A tool for managing monolithic repositories with subtree splits.
 
 ## Quick start
 
+
 ```bash
 $ monorepo-operator init git@github.com:UserName path/to/repos
 ```
@@ -56,12 +57,12 @@ $ monorepo-operator project split project01
 ```yaml
 # Mapping of projects to path inside the mono-repo and the corresponding git-url
 projects:
-- name: project
+- name: project01
   path: projects/project01
   git-url: git@github.com:UserName/project02
 
-- name: project
-  path: project/project02
+- name: project02
+  path: projects/project02
   git-url: git@github.com:UserName/project02
 
 # operating-directory stores the original repositories with the git configs

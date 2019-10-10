@@ -105,6 +105,11 @@ func (m *MonoRepo) WriteConfigFile(configFile string) error {
     return nil
 }
 
+// Remove removes the operating directory
+func (m *MonoRepo) Remove() error {
+    return os.RemoveAll(m.OperatingDir)
+}
+
 // Clone will clone all repositories which are configured into the operating directory
 func (m *MonoRepo) Clone() error {
     for _, p := range m.Projects {
