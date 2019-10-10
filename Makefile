@@ -16,7 +16,7 @@ deps:
 
 build:
 	$(info INFO: Starting build $@)
-	go build $(exe)
+	go build -o $(cmd) $(exe)
 
 lint:
 	$(info INFO: Starting build $@)

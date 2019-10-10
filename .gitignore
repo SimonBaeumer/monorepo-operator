@@ -1,6 +1,7 @@
 .idea
 !cmd/operator
 release
+monorepo-operator
 
 tmp.yml
 *.out
