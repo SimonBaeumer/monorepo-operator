@@ -168,6 +168,10 @@ func (m *MonoRepo) exec(c *cmd.Command) {
     if err := c.Execute(); err != nil {
         log.Fatal(err)
     }
+
+    if c.ExitCode() != 0 {
+        log.Fatalf("Received exit code %d, with stderr: \n%s", c.ExitCode(), c.Stderr())
+    }
 }
 
 // SplitProject splits the project and returns the hash or branch name
