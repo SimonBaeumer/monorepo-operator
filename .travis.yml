@@ -31,7 +31,6 @@ jobs:
       branches:
         only:
           - master
-          - add-docker-image
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USERNAME --password-stdin
         - TRAVIS_TAG=latest make docker-image

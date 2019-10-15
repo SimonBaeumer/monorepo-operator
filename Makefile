@@ -2,7 +2,7 @@ exe = main.go
 cmd = monorepo-operator
 TRAVIS_TAG ?= "0.0.0"
 
-.PHONY: deps lint test integration integration-windows git-hooks init docker
+.PHONY: deps lint test integration integration-windows git-hooks init docker-image docker-push
 
 init: git-hooks
 
