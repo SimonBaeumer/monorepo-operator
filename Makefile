@@ -2,7 +2,7 @@ exe = main.go
 cmd = monorepo-operator
 TRAVIS_TAG ?= "0.0.0"
 
-.PHONY: deps lint test integration integration-windows git-hooks init
+.PHONY: deps lint test integration integration-windows git-hooks init docker-image docker-push
 
 init: git-hooks
 
@@ -54,5 +54,12 @@ release-windows-386:
 	$(info INFO: Starting build $@)
 	CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -ldflags "-X main.version=$(TRAVIS_TAG) -s -w" -o release/$(cmd)-windows-386.exe $(exe)
 
+docker-image:
+	$(info INFO: Starting build $@)
+	docker build -t simonbaeumer/monorepo-operator:$(TRAVIS_TAG) .
+
+docker-push:
+	$(info INFO: Starting build $@)
+	docker push simonbaeumer/monorepo-operator:$(TRAVIS_TAG)
 
 release: release-amd64 release-arm release-386 release-mac-amd64 release-windows-386 release-windows-amd64
