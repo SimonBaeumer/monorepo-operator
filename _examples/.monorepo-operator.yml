@@ -1,0 +1,8 @@
+projects:
+- name: repo01
+  path: plugins/repo01
+  git-url: git@github.com:SimonBaeumer/repo01
+- name: repo02
+  path: plugins/repo02
+  git-url: git@github.com:SimonBaeumer/repo02
+operating-directory: .repos

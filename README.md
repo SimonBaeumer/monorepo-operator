@@ -6,17 +6,19 @@ A tool for managing monolithic repositories with subtree splits.
 ## Table of contents
 
 * [Quick start](#quick-start)
-    + [Requirements](#requirements)
-    + [Clone](#clone)
-    + [Sync](#sync)
-    + [Exec](#exec)
-    + [add](#add)
-    + [Project](#project)
-    + [exec](#exec)
-    + [split](#split)
-    + [Configuration](#configuration)
+  + [Requirements](#requirements)
+  + [Usage](#usage)
+    - [clone](#clone)
+    - [sync](#sync)
+    - [exec](#exec)
+    - [add](#add)
+    - [project](#project)
+      * [exec](#exec)
+      * [split](#split)
+  + [Configuration](#configuration)
 * [Development](#development)
-    + [ToDo](#todo)
+  + [Targets](#targets)
+  + [ToDo](#todo)
 
 ## Quick start
 
@@ -108,7 +110,9 @@ Deleted branch repo02-testing (was 8fbf026).
  - git
  - `windows`, `osx` or `linux`
  
-### Clone
+### Usage
+ 
+#### clone
 
 `clone` clones all projects into the specified `operating-directory`.
 
@@ -125,7 +129,7 @@ $ monorepo-operator clone --reset
 > Cloning repo02
 ```
 
-### Sync
+#### sync
 
 `sync` the current branch to a target branch on the remote subtree repositories. 
 This command only works in the root directory of your mono-repo.
@@ -136,7 +140,7 @@ If the `--force` flag is set the `sync` will perform a force push with `git push
 $ monorepo-operator sync [branch-name]
 ```
 
-### Exec
+#### exec
 
 `exec` executes shell commands on all projects.
 
@@ -148,7 +152,7 @@ hello
 hello
 ```
 
-### add
+#### add
 
 `add` adds a new project mapping to the `.monorepo-operator.yml`.
 
@@ -166,13 +170,13 @@ $ monorepo-operator add --clone repo03 git@github.com:SimonBaeumer/repo03 repos/
 ```
 
 
-### Project
+#### project
 
 `project` lets you execute some commands or tasks on a single project.
 
-### exec
+##### exec
 
-`exec` executes shell commands on a project.
+`project exec [name]` executes shell commands on a project.
 
 ```bash
 $ monorepo-operator project exec repo01 "echo pwd"
@@ -180,9 +184,9 @@ $ monorepo-operator project exec repo01 "echo pwd"
 /tmp/monorepo/.git/.subtree-repos/repo01
 ```
 
-### split
+##### split
 
-`split` creates a subtree split of the project and returns the hash of it.
+`project split [name]` creates a subtree split of the project and returns the hash of it.
 
 ```bash
 $ monorepo-operator project split repo01
