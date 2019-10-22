@@ -11,7 +11,7 @@ import (
 var unlockCmd = &cobra.Command{
 	Use:   "unlock [project]",
 	Short: "Unlock unlocks a given repository from its current lock state",
-	Long: ``,
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		monoRepo, err := operator.NewMonoRepo(cfgFile)
 		if err != nil {

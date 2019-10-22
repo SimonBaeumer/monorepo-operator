@@ -8,6 +8,7 @@ import (
 )
 
 var operatingDir string
+var clone bool
 
 const defaultOperatingDir = ".git/.subtree-repos"
 
@@ -35,8 +36,10 @@ Example usage:
 			log.Fatal(err)
 		}
 
-		if err := monoRepo.Clone(); err != nil {
-			log.Fatal(err)
+		if clone {
+			if err := monoRepo.Clone(); err != nil {
+				log.Fatal(err)
+			}
 		}
 	},
 }
@@ -45,4 +48,5 @@ func init() {
 	rootCmd.AddCommand(initCmd)
 
 	initCmd.Flags().StringVarP(&operatingDir, "operating-dir", "o", defaultOperatingDir, "Set the directory with the original repos")
+	initCmd.Flags().BoolVarP(&clone, "clone", "c", false, "Clones the repos directly")
 }

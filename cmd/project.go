@@ -8,7 +8,7 @@ import (
 var projectCmd = &cobra.Command{
 	Use:   "project",
 	Short: "The project command is used to operate on projects",
-	Long: ``,
+	Long:  ``,
 }
 
 func init() {
