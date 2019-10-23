@@ -11,7 +11,7 @@ import (
 var projectSplitCmd = &cobra.Command{
 	Use:   "split [project]",
 	Short: "Create a subtree of a project",
-	Long: ``,
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		m, err := operator.NewMonoRepo(cfgFile)
 		if err != nil {

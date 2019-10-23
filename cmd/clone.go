@@ -12,7 +12,7 @@ var reset bool
 var cloneCmd = &cobra.Command{
 	Use:   "clone",
 	Short: "Clones all projects into the given operating directory. This command is used after a new clone of your git repository.",
-	Long: ``,
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		m, err := operator.NewMonoRepo(cfgFile)
 		if err != nil {

@@ -8,11 +8,12 @@ import (
 )
 
 var useForce = false
+
 // syncCmd represents the sync command
 var syncCmd = &cobra.Command{
 	Use:   "sync [branch]",
 	Short: "Sync creates subtree splits and will sync them with the remote",
-	Long: ``,
+	Long:  ``,
 	Args: func(cmd *cobra.Command, args []string) error {
 		if len(args) == 0 {
 			return fmt.Errorf("a branch is needed to sync the subtree projects")

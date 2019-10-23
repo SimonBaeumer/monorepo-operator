@@ -7,8 +7,6 @@ import (
 	"log"
 )
 
-var withoutClone = false
-
 // projectAddCmd represents the projectAdd command
 var projectAddCmd = &cobra.Command{
 	Use:   "add [name] [git-url] [path]",
@@ -18,6 +16,12 @@ var projectAddCmd = &cobra.Command{
 Example:
 	project add new_project git@github.com:SimonBaeumer/monorepo-operator.git path/to/project
 `,
+	Args: func(cmd *cobra.Command, args []string) error {
+		if len(args) < 3 {
+			return fmt.Errorf("name, git-url and path are necessary")
+		}
+		return nil
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		m, err := operator.NewMonoRepo(cfgFile)
 		if err != nil {
@@ -25,9 +29,9 @@ Example:
 		}
 
 		p := operator.Project{
-			Name: args[0],
+			Name:   args[0],
 			GitUrl: args[1],
-			Path: args[2],
+			Path:   args[2],
 		}
 
 		m.Add(p)
@@ -37,8 +41,8 @@ Example:
 			log.Fatal(err)
 		}
 
-		if !withoutClone {
-			fmt.Printf("> Cloning %s", p.Name)
+		if clone {
+			fmt.Printf("> Cloning %s\n", p.Name)
 			if err := p.GitClone(m.OperatingDir); err != nil {
 				log.Fatal(err)
 			}
@@ -48,5 +52,5 @@ Example:
 
 func init() {
 	rootCmd.AddCommand(projectAddCmd)
-	projectCmd.Flags().BoolVarP(&withoutClone, "without-clone", "w", false, "Disables the cloning of the added project.")
+	projectAddCmd.Flags().BoolVarP(&clone, "clone", "c", false, "Directly clone the project into the operating directory")
 }

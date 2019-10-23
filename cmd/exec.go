@@ -10,7 +10,7 @@ import (
 var operateCmd = &cobra.Command{
 	Use:   "exec",
 	Short: "Execute a command on all your projects",
-	Long: ``,
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		m, err := operator.NewMonoRepo(ConfigFile)
 		if err != nil {

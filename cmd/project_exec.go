@@ -11,7 +11,7 @@ import (
 var projectExecCmd = &cobra.Command{
 	Use:   "exec [project] [command]",
 	Short: "Executes a single command on a given project",
-	Long: ``,
+	Long:  ``,
 	Run: func(cmd *cobra.Command, args []string) {
 		m, err := operator.NewMonoRepo(cfgFile)
 		if err != nil {
