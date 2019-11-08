@@ -35,6 +35,23 @@ func (p *Project) GitClone(dest string) error {
 	return nil
 }
 
+// Exec executes a command inside the project's directory
+func (p *Project) Exec(command string) {
+	fmt.Println("> Fetching " + p.Name)
+
+	setWorkingDir := func(c *cmd.Command) {
+		c.WorkingDir = p.Path
+	}
+
+	c := newCommand(
+		command,
+		cmd.WithStandardStreams,
+		setWorkingDir,
+	)
+
+	exec(c)
+}
+
 // Lock will lock a project for specific tasks
 func (p *Project) Lock() error {
 	lockFile := path.Join(p.Path, ".git/monorepo.lock")

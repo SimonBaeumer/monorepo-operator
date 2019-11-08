@@ -25,6 +25,10 @@ func NewMonoRepo(config string) (*MonoRepo, error) {
 		return &MonoRepo{}, err
 	}
 
+	for i, p := range m.Projects {
+		m.Projects[i].Path = path.Join(m.OperatingDir, p.Name)
+	}
+
 	return m, nil
 }
 
@@ -61,24 +65,8 @@ func (m *MonoRepo) Add(p Project) {
 //Exec executes a command on all subrepos
 func (m *MonoRepo) Exec(command string) {
 	for _, p := range m.Projects {
-		m.ExecOnProject(p, command)
+		p.Exec(command)
 	}
-}
-
-// ExecOnProject executes a command on a single project
-func (m *MonoRepo) ExecOnProject(p Project, command string) {
-	fmt.Println("> Execute on " + p.Name)
-
-	setWorkingDir := func(c *cmd.Command) {
-		c.WorkingDir = path.Join(m.OperatingDir, p.Name)
-	}
-
-	c := newCommand(
-		command,
-		cmd.WithStandardStreams,
-		setWorkingDir,
-	)
-	m.exec(c)
 }
 
 // GetProject returns a project by name, if no project was found it will return an error.
@@ -140,37 +128,27 @@ func (m *MonoRepo) Sync(branch string, useForce bool) {
 		addRemoteCmd := newCommand(
 			fmt.Sprintf("git remote add %s %s", p.Name, p.GitUrl),
 			cmd.WithStandardStreams)
-		m.exec(addRemoteCmd)
+		exec(addRemoteCmd)
 
 		// Push project from the split branch to the configured branch
 		fmt.Printf("> push project %s\n", p.Name)
 		pushCmd := newCommand(
 			fmt.Sprintf("git push %s %s %s:%s", forceFlag, p.Name, splitBranch, branch),
 			cmd.WithStandardStreams)
-		m.exec(pushCmd)
+		exec(pushCmd)
 
 		// Remove created project remote
 		fmt.Printf("> remove remote %s\n", p.Name)
 		delCmd := newCommand(fmt.Sprintf("git remote rm %s", p.Name), cmd.WithStandardStreams)
-		m.exec(delCmd)
+		exec(delCmd)
 
 		// Remove split branch
 		fmt.Printf("> remove branch %s\n", splitBranch)
 		delBranchCmd := newCommand(fmt.Sprintf("git branch -D %s", splitBranch), cmd.WithStandardStreams)
-		m.exec(delBranchCmd)
+		exec(delBranchCmd)
 
 		// Print empty line
 		fmt.Println()
-	}
-}
-
-func (m *MonoRepo) exec(c *cmd.Command) {
-	if err := c.Execute(); err != nil {
-		log.Fatal(err)
-	}
-
-	if c.ExitCode() != 0 {
-		log.Fatalf("Received exit code %d, with stderr: \n%s", c.ExitCode(), c.Stderr())
 	}
 }
 
@@ -183,15 +161,70 @@ func (m *MonoRepo) SplitProject(p Project, branch string) string {
 	}
 
 	c := newCommand(createSplitCmd)
-	m.exec(c)
+	exec(c)
 
 	return c.Stdout()
 }
 
-// Wrapper function to add some options which will always be needed
-func newCommand(command string, options ...func(*cmd.Command)) *cmd.Command {
-	parentEnv := func(c *cmd.Command) {
-		c.Env = os.Environ()
+// RemoteBranches returns a list of all branches on all remote mono repos
+func (m *MonoRepo) RemoteBranches() []string {
+	m.Fetch()
+	dir, err := os.Getwd()
+	if err != nil {
+		log.Fatal(err)
 	}
-	return cmd.NewCommand(command, append(options, parentEnv)...)
+	return RemoteBranches(dir)
+}
+
+// RemoveBranches removes all branches in subtree splits which do not exist
+// in the remote mono repo
+func (m *MonoRepo) RemoveBranches(noLocal bool, noRemote bool) {
+	monoRepoRemoteBranches := m.RemoteBranches()
+
+	for _, p := range m.Projects {
+		p.Exec("git fetch origin > /dev/null")
+
+		projectRemoteBranches := RemoteBranches(p.Path)
+		for _, projectBranch := range projectRemoteBranches {
+			if noRemote {
+				break
+			}
+
+			found := m.containsString(projectBranch, monoRepoRemoteBranches)
+			if !found {
+				fmt.Println("> Remove remote branch " + projectBranch)
+				s := fmt.Sprintf("git push origin --delete %s", projectBranch)
+				p.Exec(s)
+			}
+		}
+
+		projectLocalBranches := LocalBranches(p.Path)
+		for _, projectBranch := range projectLocalBranches {
+			if noLocal {
+				break
+			}
+
+			found := m.containsString(projectBranch, monoRepoRemoteBranches)
+			if !found {
+				fmt.Println("> Remove local branch " + projectBranch)
+				s := fmt.Sprintf("git branch -D %s", projectBranch)
+				p.Exec(s)
+			}
+		}
+	}
+}
+
+func (m *MonoRepo) Fetch() {
+	fmt.Println("> Fetching mono-repo")
+	c := newCommand("git fetch -p origin")
+	exec(c)
+}
+
+func (m *MonoRepo) containsString(needle string, haystack []string) bool {
+	for _, item := range haystack {
+		if needle == item {
+			return true
+		}
+	}
+	return false
 }

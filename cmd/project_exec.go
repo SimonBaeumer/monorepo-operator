@@ -23,7 +23,7 @@ var projectExecCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		m.ExecOnProject(p, strings.Join(args[1:], " "))
+		p.Exec(strings.Join(args[1:], " "))
 	},
 }
 
