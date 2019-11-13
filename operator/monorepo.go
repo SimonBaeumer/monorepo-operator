@@ -26,7 +26,7 @@ func NewMonoRepo(config string) (*MonoRepo, error) {
 	}
 
 	for i, p := range m.Projects {
-		m.Projects[i].Path = path.Join(m.OperatingDir, p.Name)
+		m.Projects[i].OperatingPath = path.Join(m.OperatingDir, p.Name)
 	}
 
 	return m, nil
@@ -184,7 +184,7 @@ func (m *MonoRepo) RemoveBranches(noLocal bool, noRemote bool) {
 	for _, p := range m.Projects {
 		p.Exec("git fetch origin > /dev/null")
 
-		projectRemoteBranches := RemoteBranches(p.Path)
+		projectRemoteBranches := RemoteBranches(p.OperatingPath)
 		for _, projectBranch := range projectRemoteBranches {
 			if noRemote {
 				break
@@ -198,7 +198,7 @@ func (m *MonoRepo) RemoveBranches(noLocal bool, noRemote bool) {
 			}
 		}
 
-		projectLocalBranches := LocalBranches(p.Path)
+		projectLocalBranches := LocalBranches(p.OperatingPath)
 		for _, projectBranch := range projectLocalBranches {
 			if noLocal {
 				break

@@ -19,7 +19,6 @@ func LocalBranches(workingDir string) []string {
 	c := createCommand(command, workingDir)
 
 	return strings.Split(c.Stdout(), "\n")
-
 }
 
 func createCommand(command string, workingDir string) *cmd.Command {

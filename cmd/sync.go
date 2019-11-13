@@ -7,7 +7,10 @@ import (
 	"log"
 )
 
-var useForce = false
+var (
+	useForce       = false
+	removeBranches = false
+)
 
 // syncCmd represents the sync command
 var syncCmd = &cobra.Command{
@@ -27,11 +30,17 @@ var syncCmd = &cobra.Command{
 		}
 
 		m.Sync(args[0], useForce)
+
+		// Remove branches if flag is set to true. Ignore local branches for syncing.
+		if removeBranches {
+			m.RemoveBranches(true, false)
+		}
 	},
 }
 
 func init() {
 	syncCmd.Flags().BoolVarP(&useForce, "force", "f", false, "this will use the force flag in git push")
+	syncCmd.Flags().BoolVarP(&removeBranches, "remove-branches", "r", false, "this flag removes branches in subtree-splits which do not exist on the mono-repo after syncing")
 
 	rootCmd.AddCommand(syncCmd)
 }
