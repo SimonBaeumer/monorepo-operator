@@ -8,7 +8,8 @@ import (
 )
 
 var cfgFile string
-var debug bool
+var Debug bool
+var version string
 
 const ConfigFile = ".monorepo-operator.yml"
 
@@ -21,7 +22,9 @@ var rootCmd = &cobra.Command{
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute() {
+func Execute(v string) {
+	version = v
+
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
 		os.Exit(1)
@@ -32,7 +35,7 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", ConfigFile, "config file (default is .monorepo-operator.yml)")
-	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "")
+	rootCmd.PersistentFlags().BoolVar(&Debug, "Debug", false, "")
 }
 
 // initConfig reads in config file and ENV variables if set.

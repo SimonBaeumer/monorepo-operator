@@ -9,9 +9,12 @@ import (
 )
 
 type Project struct {
-	Name   string `yaml:"name"`
-	Path   string `yaml:"path"`
-	GitUrl string `yaml:"git-url"`
+	Name string `yaml:"name"`
+	// Path defines the path to the directory inside the mono repo
+	Path string `yaml:"path"`
+	// OperatingPath defines the path to the checked out repository, located in the mono-repos` operating dir
+	OperatingPath string `yaml:"operating-path,omitempty"`
+	GitUrl        string `yaml:"git-url"`
 }
 
 // GitClone clones the project into the given destination path
@@ -33,6 +36,23 @@ func (p *Project) GitClone(dest string) error {
 		return fmt.Errorf(clone.Stderr())
 	}
 	return nil
+}
+
+// Exec executes a command inside the project's directory
+func (p *Project) Exec(command string) {
+	fmt.Println("> Exec " + p.Name)
+
+	setWorkingDir := func(c *cmd.Command) {
+		c.WorkingDir = p.OperatingPath
+	}
+
+	c := newCommand(
+		command,
+		cmd.WithStandardStreams,
+		setWorkingDir,
+	)
+
+	exec(c)
 }
 
 // Lock will lock a project for specific tasks

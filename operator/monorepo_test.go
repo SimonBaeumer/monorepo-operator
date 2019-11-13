@@ -115,6 +115,6 @@ func Test_MonoRepo_Exec(t *testing.T) {
 
 	assert.Len(t, m.Projects, 2)
 	for _, p := range m.Projects {
-		assert.FileExists(t, path.Join(m.OperatingDir, p.Name, "test"))
+		assert.FileExists(t, path.Join(p.OperatingPath, "test"))
 	}
 }
