@@ -15,7 +15,9 @@ services:
     build: client
     user: "${UID}"
     volumes:
-      - ./:/app
+      - ./../:/app
+      - ./../monorepo-operator:/bin/monorepo-operator
+      - ./suite/:/root/suite
     networks:
       - git_net
 

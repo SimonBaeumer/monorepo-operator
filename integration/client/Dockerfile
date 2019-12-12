@@ -23,4 +23,7 @@ RUN chmod 644 /root/.ssh/known_hosts
 RUN git config --global user.email "you@example.com"
 RUN git config --global user.name "Your Name"
 
+COPY monorepo monorepo
+WORKDIR /root/monorepo
+
 CMD [ "/bin/bash", "-c", " while :; do echo 'Hit CTRL+C'; sleep 1; done"]

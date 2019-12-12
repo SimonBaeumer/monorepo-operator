@@ -1,10 +1,6 @@
 #!/bin/bash
 
-mkdir monorepo
-cd monorepo
-
 git init
-touch test
 git add -A
 git commit -m "Initial commit"
 

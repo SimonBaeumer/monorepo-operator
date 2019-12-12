@@ -7,6 +7,7 @@ import (
 )
 
 func exec(c *cmd.Command) {
+	//log.Println("exec command: ", c.Command)
 	if err := c.Execute(); err != nil {
 		log.Fatal(err)
 	}
