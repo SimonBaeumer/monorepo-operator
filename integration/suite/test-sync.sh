@@ -16,3 +16,5 @@ create_commits
 
 monorepo-operator sync master
 monorepo-operator exec "git fetch origin && git pull origin master"
+
+monorepo-operator exec "git log --name-status --pretty=format:'%an, %ae - %s' HEAD^..HEAD" | diff ./../suite/test-sync-resulsts.txt -

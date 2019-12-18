@@ -1,0 +1,9 @@
+> Exec subtree1
+Your Name, you@example.com - commit subtrees/subtree1
+M	README.md
+> Exec subtree2
+Your Name, you@example.com - commit subtrees/subtree2
+M	README.md
+> Exec subtree3
+Your Name, you@example.com - commit subtrees/subtree3
+M	README.md
