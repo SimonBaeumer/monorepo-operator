@@ -17,6 +17,9 @@ go:
 sudo: required
 dist: trusty
 
+services:
+  - docker
+
 before_install:
   - go get -u golang.org/x/lint/golint
   - curl -L https://github.com/SimonBaeumer/commander/releases/download/v0.3.0/commander-linux-amd64 -o ~/bin/commander
@@ -26,6 +29,11 @@ jobs:
   include:
     - name: Unit tests
       script: make test
+
+    - name: Integration tests
+      script:
+        - make build
+        - cd integration && ./integration.sh
 
     - name: Deploy docker latest image
       stage: deploy

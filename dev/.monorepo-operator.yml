@@ -1,0 +1,4 @@
+projects:
+  - name: test
+    path: test
+    git-url: git@github.com

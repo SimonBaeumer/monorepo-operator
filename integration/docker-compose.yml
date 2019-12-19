@@ -1,0 +1,29 @@
+version: '3.3'
+
+services:
+  git-server:
+    build: git
+    ports:
+      - "22"
+      - "127.0.0.1:2222:22"
+    networks:
+      - git_net
+    expose:
+      - 22
+
+  git-client:
+    build: client
+    user: "${UID}"
+    volumes:
+      - ./../:/app
+      - ./../monorepo-operator:/bin/monorepo-operator
+      - ./suite/:/root/suite
+    networks:
+      - git_net
+
+networks:
+  git_net:
+    ipam:
+      driver: default
+      config:
+      - subnet: "172.16.100.0/24"

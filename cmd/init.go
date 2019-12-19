@@ -5,6 +5,7 @@ import (
 	"github.com/SimonBaeumer/monorepo-operator/operator"
 	"github.com/spf13/cobra"
 	"log"
+	"os"
 )
 
 var operatingDir string
@@ -33,6 +34,10 @@ Example usage:
 	Run: func(cmd *cobra.Command, args []string) {
 		monoRepo := operator.NewMonoRepoFromPath(args[0], args[1], operatingDir)
 		if err := monoRepo.WriteConfigFile(cfgFile); err != nil {
+			log.Fatal(err)
+		}
+
+		if err := os.Mkdir(operatingDir, 0755); err != nil {
 			log.Fatal(err)
 		}
 
