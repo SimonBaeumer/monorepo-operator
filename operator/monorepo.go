@@ -116,6 +116,7 @@ func (m *MonoRepo) Sync(branch string, useForce bool) {
 	if useForce {
 		forceFlag = "-f"
 	}
+
 	for _, p := range m.Projects {
 		splitBranch := fmt.Sprintf("%s-%s", p.Name, branch)
 
@@ -149,6 +150,45 @@ func (m *MonoRepo) Sync(branch string, useForce bool) {
 
 		// Print empty line
 		fmt.Println()
+	}
+}
+
+func (m *MonoRepo) SyncTag(tag string, useForce bool) {
+	// checkout tag
+	// split projects and get subtree ref
+	// checkout out splitted projects
+	// create all tags inside the subtress
+	// cancel if one ref does not exists
+	// push tags
+	forceFlag := ""
+	if useForce {
+		forceFlag = "-f"
+	}
+
+	fmt.Printf("> check if tag exists on remote and locally")
+	checkCmd := newCommand(fmt.Sprintf("git ls-remote --tags origin | grep %s", tag))
+	exec(checkCmd)
+	checkLocalCmd := newCommand(fmt.Sprintf("git tag | grep %s", tag))
+	exec(checkLocalCmd)
+
+	fmt.Printf("> checkout tag %s\n", tag)
+	tagCmd := newCommand(fmt.Sprintf("git checkout %s", tag), cmd.WithStandardStreams)
+	exec(tagCmd)
+
+	fmt.Sprintf("> checking out tag refs on subtrees")
+	for _, p := range m.Projects {
+		ref := m.SplitProject(p, "")
+		p.Exec(fmt.Sprintf("git checkout %s", ref))
+	}
+
+	fmt.Sprintf("> Create tags on subtrees")
+	for _, p := range m.Projects {
+		p.Exec(fmt.Sprintf("git tag %s", tag))
+	}
+
+	fmt.Sprintf("> Push subtree tags")
+	for _, p := range m.Projects {
+		p.Exec(fmt.Sprintf("git push %s origin %s", forceFlag, tag))
 	}
 }
 
