@@ -1,5 +1,7 @@
 #!/bin/bash
 
+ssh -o "StrictHostKeyChecking no" git-server /bin/false
+
 git init
 git add -A
 git commit -m "Initial commit"
