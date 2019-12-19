@@ -22,7 +22,7 @@ func NewMonoRepo(config string) (*MonoRepo, error) {
 	out, _ := ioutil.ReadFile(config)
 	err := yaml.Unmarshal(out, m)
 	if err != nil {
-		return &MonoRepo{}, err
+		return m, err
 	}
 
 	for i, p := range m.Projects {

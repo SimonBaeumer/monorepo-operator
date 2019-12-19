@@ -2,11 +2,16 @@ package operator
 
 import (
 	"github.com/SimonBaeumer/cmd"
+	"github.com/spf13/viper"
 	"log"
 	"os"
 )
 
 func exec(c *cmd.Command) {
+	if viper.GetBool("debug") {
+		log.Println(c.Command)
+	}
+
 	if err := c.Execute(); err != nil {
 		log.Fatal(err)
 	}

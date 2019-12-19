@@ -8,7 +8,7 @@ import (
 )
 
 var cfgFile string
-var Debug bool
+var debug bool
 var version string
 
 const ConfigFile = ".monorepo-operator.yml"
@@ -35,7 +35,7 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", ConfigFile, "config file (default is .monorepo-operator.yml)")
-	rootCmd.PersistentFlags().BoolVar(&Debug, "debug", false, "")
+	rootCmd.PersistentFlags().BoolVar(&debug, "debug", false, "")
 }
 
 // initConfig reads in config file and ENV variables if set.
@@ -50,6 +50,7 @@ func initConfig() {
 	}
 
 	viper.AutomaticEnv() // read in environment variables that match
+	viper.BindPFlag("debug", rootCmd.PersistentFlags().Lookup("debug"))
 
 	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
