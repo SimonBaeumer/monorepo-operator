@@ -35,7 +35,7 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", ConfigFile, "config file (default is .monorepo-operator.yml)")
-	rootCmd.PersistentFlags().BoolVar(&Debug, "Debug", false, "")
+	rootCmd.PersistentFlags().BoolVar(&Debug, "debug", false, "")
 }
 
 // initConfig reads in config file and ENV variables if set.

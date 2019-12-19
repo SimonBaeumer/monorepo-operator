@@ -137,7 +137,9 @@ This command only works in the root directory of your mono-repo.
 
 If the `--force` flag is set the `sync` will perform a force push with `git push -f [...]`.
 
-The `--remove-branches` flag removes branches in subtree repos which do not exist in the mono-repo.  
+The `--remove-branches` flag removes branches in subtree repos which do not exist in the mono-repo.
+
+The `--tags` flag syncs a tag instead of the given branch.  
 
 ```bash
 $ monorepo-operator sync [branch-name]
