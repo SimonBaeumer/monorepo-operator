@@ -10,6 +10,7 @@ import (
 var (
 	useForce       = false
 	removeBranches = false
+	syncTag        = false
 )
 
 // syncCmd represents the sync command
@@ -29,7 +30,11 @@ var syncCmd = &cobra.Command{
 			log.Fatal(err)
 		}
 
-		m.Sync(args[0], useForce)
+		if syncTag {
+			m.SyncTag(args[0], useForce)
+		} else {
+			m.Sync(args[0], useForce)
+		}
 
 		// Remove branches if flag is set to true. Ignore local branches for syncing.
 		if removeBranches {
@@ -40,7 +45,8 @@ var syncCmd = &cobra.Command{
 
 func init() {
 	syncCmd.Flags().BoolVarP(&useForce, "force", "f", false, "this will use the force flag in git push")
-	syncCmd.Flags().BoolVarP(&removeBranches, "remove-branches", "r", false, "this flag removes branches in subtree-splits which do not exist on the mono-repo after syncing")
+	syncCmd.Flags().BoolVarP(&removeBranches, "remove-branches", "r", false, "removes branches in subtree-splits which do not exist on the mono-repo after syncing")
+	syncCmd.Flags().BoolVarP(&syncTag, "tags", "t", false, "syncs a tag instead of a branch")
 
 	rootCmd.AddCommand(syncCmd)
 }
