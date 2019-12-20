@@ -26,15 +26,8 @@ func (p *Project) GitClone(dest string) error {
 		p.Name,
 	)
 
-	clone := cmd.NewCommand(cloneCmd)
-	err := clone.Execute()
-	if err != nil {
-		return err
-	}
+	exec(newCommand(cloneCmd))
 
-	if clone.ExitCode() != 0 {
-		return fmt.Errorf(clone.Stderr())
-	}
 	return nil
 }
 
