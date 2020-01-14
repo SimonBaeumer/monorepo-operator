@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"fmt"
 	"github.com/SimonBaeumer/monorepo-operator/operator"
 	"github.com/spf13/cobra"
 	"log"
@@ -24,6 +25,12 @@ var projectExecCmd = &cobra.Command{
 		}
 
 		p.Exec(strings.Join(args[1:], " "))
+		fmt.Println("test")
+		fmt.Printf("test")
+		fmt.Printf("test")
+		fmt.Printf("test")
+		fmt.Printf("test")
+		fmt.Printf("asfddsaf")
 	},
 }
 
