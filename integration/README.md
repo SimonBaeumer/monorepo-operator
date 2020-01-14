@@ -55,8 +55,8 @@ The repos are located in the `git-server` container in `/srv/git/`.
  - [x] Init project
  - [ ] Split project
  - [x] Synchronize project
- - [ ] Remove branches from subtrees which do not exist in monorepo
- - [ ] Execute commands on every repository
+ - [x] Remove branches from subtrees which do not exist in monorepo
+ - [x] Execute commands on every repository
  - [ ] Add a new project
  - [ ] Clone with `--reset`
  
