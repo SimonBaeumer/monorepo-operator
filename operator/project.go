@@ -20,7 +20,7 @@ type Project struct {
 // GitClone clones the project into the given destination path
 func (p *Project) GitClone(dest string) error {
 	cloneCmd := fmt.Sprintf(
-		"git clone %s.git %s/%s",
+		"git clone %s %s/%s",
 		p.GitUrl,
 		dest,
 		p.Name,

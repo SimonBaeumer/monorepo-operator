@@ -142,7 +142,11 @@ The `--remove-branches` flag removes branches in subtree repos which do not exis
 The `--tags` flag syncs a tag instead of the given branch.  
 
 ```bash
+# Sync branches
 $ monorepo-operator sync [branch-name]
+
+# Sync tags
+$ monorepo-operator sync [tag-name] --tags
 ```
 
 #### exec
@@ -243,10 +247,8 @@ $ make tests
 ### ToDo
 
  - Lock and Unlock projects while executing commands
- - Adding more unit tests
  - Post and Pre-Hooks
     - Split
     - Push
     - Exec
- - Sync tags
  - Add pipeline examples
