@@ -47,7 +47,7 @@ func NewMonoRepoFromPath(gitBaseUrl string, subtreeParentDirectory string, opera
 
 		p := Project{
 			Name:   f.Name(),
-			GitUrl: fmt.Sprintf("%s/%s", gitBaseUrl, f.Name()),
+			GitUrl: fmt.Sprintf("%s/%s.git", gitBaseUrl, f.Name()),
 			Path:   path.Join(subtreeParentDirectory, f.Name()),
 		}
 

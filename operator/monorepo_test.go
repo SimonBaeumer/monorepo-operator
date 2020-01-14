@@ -47,7 +47,7 @@ func TestNewMonoRepoFromPath(t *testing.T) {
 	assert.Equal(t, "repo01", monoRepo.Projects[0].Name)
 
 	assert.Equal(t, "repo02", monoRepo.Projects[1].Name)
-	assert.Equal(t, "git@github.com:spf13/repo02", monoRepo.Projects[1].GitUrl)
+	assert.Equal(t, "git@github.com:spf13/repo02.git", monoRepo.Projects[1].GitUrl)
 	assert.Equal(t, repoDir+"/repo02", monoRepo.Projects[1].Path)
 }
 

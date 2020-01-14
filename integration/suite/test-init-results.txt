@@ -1,11 +1,11 @@
 projects:
 - name: subtree1
   path: subtrees/subtree1
-  git-url: root@git-server:/srv/git//subtree1
+  git-url: root@git-server:/srv/git//subtree1.git
 - name: subtree2
   path: subtrees/subtree2
-  git-url: root@git-server:/srv/git//subtree2
+  git-url: root@git-server:/srv/git//subtree2.git
 - name: subtree3
   path: subtrees/subtree3
-  git-url: root@git-server:/srv/git//subtree3
+  git-url: root@git-server:/srv/git//subtree3.git
 operating-directory: .git/.subtree-repos
