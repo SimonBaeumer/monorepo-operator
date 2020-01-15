@@ -18,7 +18,7 @@ A tool for managing monolithic repositories with subtree splits.
       * [split](#split)
   + [Configuration](#configuration)
 * [Development](#development)
-  + [Targets](#targets)
+  + [Targets](#build-targets)
   + [ToDo](#todo)
 
 ## Quick start
@@ -47,10 +47,10 @@ $ cat .monorepo-operator.yml
 projects:
 - name: repo01
   path: plugins/repo01
-  git-url: git@github.com:SimonBaeumer/repo01
+  git-url: git@github.com:SimonBaeumer/repo01.git
 - name: repo02
   path: plugins/repo02
-  git-url: git@github.com:SimonBaeumer/repo02
+  git-url: git@github.com:SimonBaeumer/repo02.git
 operating-directory: .repos
 
 # Clone the repository into the specified operating-directory .repos
@@ -168,11 +168,11 @@ hello
 
 ```bash
 # Add project to your mapping config
-$ monorepo-operator add repo03 git@github.com:SimonBaeumer/repo03 repos/
+$ monorepo-operator add repo03 git@github.com:SimonBaeumer/repo03.git repos/
 > Write config file .monorepo-operator.yml
 
 # Directly clone the repo of the project with --clone
-$ monorepo-operator add --clone repo03 git@github.com:SimonBaeumer/repo03 repos/
+$ monorepo-operator add --clone repo03 git@github.com:SimonBaeumer/repo03.git repos/
 > Write config file .monorepo-operator.yml
 > Cloning repo03
 [...]
@@ -215,11 +215,11 @@ $ monorepo-operator project split repo01
 projects:
 - name: project01
   path: projects/project01
-  git-url: git@github.com:UserName/project02
+  git-url: git@github.com:UserName/project02.git
 
 - name: project02
   path: projects/project02
-  git-url: git@github.com:UserName/project02
+  git-url: git@github.com:UserName/project02.git
 
 # operating-directory stores the original repositories with the git configs
 # the exec command executes all commands on all directories located under the operating dir
@@ -228,7 +228,7 @@ operating-directory: .git/.subtree-repos
 
 ## Development
 
-### Targets
+### Build targets
 
 ```bash
 # Init dev environment, i.e. git-hooks
