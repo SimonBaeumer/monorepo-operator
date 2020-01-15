@@ -175,18 +175,18 @@ func (m *MonoRepo) SyncTag(tag string, useForce bool) {
 	tagCmd := newCommand(fmt.Sprintf("git checkout %s", tag), cmd.WithStandardStreams)
 	exec(tagCmd)
 
-	fmt.Sprintf("> checking out tag refs on subtrees")
+	fmt.Printf("> checking out tag refs on subtrees")
 	for _, p := range m.Projects {
 		ref := m.SplitProject(p, "")
 		p.Exec(fmt.Sprintf("git checkout %s", ref))
 	}
 
-	fmt.Sprintf("> Create tags on subtrees")
+	fmt.Printf("> Create tags on subtrees")
 	for _, p := range m.Projects {
 		p.Exec(fmt.Sprintf("git tag %s", tag))
 	}
 
-	fmt.Sprintf("> Push subtree tags")
+	fmt.Printf("> Push subtree tags")
 	for _, p := range m.Projects {
 		p.Exec(fmt.Sprintf("git push %s origin %s", forceFlag, tag))
 	}

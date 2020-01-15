@@ -7,9 +7,13 @@ import (
 	"os"
 )
 
-var cfgFile string
-var debug bool
-var version string
+var (
+	cfgFile string
+	debug   bool
+	version string
+	ref     string
+	build   string
+)
 
 const ConfigFile = ".monorepo-operator.yml"
 
@@ -22,8 +26,13 @@ var rootCmd = &cobra.Command{
 
 // Execute adds all child commands to the root command and sets flags appropriately.
 // This is called by main.main(). It only needs to happen once to the rootCmd.
-func Execute(v string) {
+// v contains the version number
+// r the current commit ref
+// b the current build number
+func Execute(v string, b string, r string) {
 	version = v
+	ref = r
+	build = b
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)
