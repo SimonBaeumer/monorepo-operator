@@ -1,6 +1,15 @@
 # BUILD STAGE
 FROM golang:1.12
+
 ENV GO111MODULE on
+
+ARG VERSION="0.0.0"
+ARG BUILD_NUMBER="dev"
+ARG REF="dev"
+
+ENV VERSION ${VERSION}
+ENV BUILD_NUMBER ${BUILD_NUMBER}
+ENV REF ${REF}
 
 WORKDIR /go/src/github.com/SimonBaeumer/monorepo-operator
 COPY . ./
