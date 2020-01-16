@@ -45,8 +45,8 @@ jobs:
           - master
       script:
         - echo "$DOCKER_PASSWORD" | docker login -u $DOCKER_USERNAME --password-stdin
-        - TRAVIS_TAG=latest make docker-image
-        - TRAVIS_TAG=latest make docker-push
+        - VERSION=latest make docker-image
+        - VERSION=latest make docker-push
 
     - stage: release
       name: "Release binaries"
