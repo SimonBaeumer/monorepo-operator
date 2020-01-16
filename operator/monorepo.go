@@ -165,7 +165,7 @@ func (m *MonoRepo) SyncTag(tag string, useForce bool) {
 		forceFlag = "-f"
 	}
 
-	fmt.Printf("> check if tag exists on remote and locally")
+	fmt.Printf("> check if tag exists on remote and locally\n")
 	checkCmd := newCommand(fmt.Sprintf("git ls-remote --tags origin | grep %s", tag))
 	exec(checkCmd)
 	checkLocalCmd := newCommand(fmt.Sprintf("git tag | grep %s", tag))
@@ -175,18 +175,18 @@ func (m *MonoRepo) SyncTag(tag string, useForce bool) {
 	tagCmd := newCommand(fmt.Sprintf("git checkout %s", tag), cmd.WithStandardStreams)
 	exec(tagCmd)
 
-	fmt.Printf("> checking out tag refs on subtrees")
+	fmt.Printf("> checking out tag refs on subtrees\n")
 	for _, p := range m.Projects {
 		ref := m.SplitProject(p, "")
 		p.Exec(fmt.Sprintf("git checkout %s", ref))
 	}
 
-	fmt.Printf("> Create tags on subtrees")
+	fmt.Printf("> Create tags on subtrees\n")
 	for _, p := range m.Projects {
 		p.Exec(fmt.Sprintf("git tag %s", tag))
 	}
 
-	fmt.Printf("> Push subtree tags")
+	fmt.Printf("> Push subtree tags\n")
 	for _, p := range m.Projects {
 		p.Exec(fmt.Sprintf("git push %s origin %s", forceFlag, tag))
 	}
