@@ -32,6 +32,10 @@ test-coverage:
 	$(info INFO: Starting build $@)
 	go test -coverprofile c.out ./...
 
+test-integration: build
+	$(info INFO: Starting build $@)
+	cd integration && ./integration.sh
+
 release-amd64:
 	$(info INFO: Starting build $@)
 	CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags "-X main.version=$(VERSION) -X main.build=$(BUILD_NUMBER) -X main.ref=$(REF) -s -w" -o release/$(cmd)-linux-amd64 $(exe)

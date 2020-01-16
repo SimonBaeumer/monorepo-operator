@@ -165,31 +165,82 @@ func (m *MonoRepo) SyncTag(tag string, useForce bool) {
 		forceFlag = "-f"
 	}
 
-	fmt.Printf("> check if tag exists on remote and locally")
+	fmt.Printf("> check if tag exists on remote and locally\n")
 	checkCmd := newCommand(fmt.Sprintf("git ls-remote --tags origin | grep %s", tag))
 	exec(checkCmd)
 	checkLocalCmd := newCommand(fmt.Sprintf("git tag | grep %s", tag))
 	exec(checkLocalCmd)
 
+	// Get the hash of the tag so it can be checked out after each sync.
+	// Further it will be used later to recreate the tag in the repository
+	tagCommitHashCmd := newCommand(fmt.Sprintf("git rev-list -n 1 %s", tag))
+	exec(tagCommitHashCmd)
+	tagCommitHash := tagCommitHashCmd.Stdout()
+
+	// Checkout the tag which should be synced to all subtree repos
 	fmt.Printf("> checkout tag %s\n", tag)
 	tagCmd := newCommand(fmt.Sprintf("git checkout %s", tag), cmd.WithStandardStreams)
 	exec(tagCmd)
 
-	fmt.Printf("> checking out tag refs on subtrees")
+	// Remove tag because it is not possible to create two tags with the same name
+	fmt.Printf("> remove original tag %s\n", tag)
+	rmTagCmd := newCommand(fmt.Sprintf("git tag -d %s", tag))
+	exec(rmTagCmd)
+
+	fmt.Printf("> checking out tag refs on subtrees\n")
 	for _, p := range m.Projects {
+		// Checkout the subtree
 		ref := m.SplitProject(p, "")
-		p.Exec(fmt.Sprintf("git checkout %s", ref))
+		fmt.Printf("> checkout subtree ref %s\n", p.Name)
+		checkoutTreeCmd := newCommand(fmt.Sprintf("git checkout %s", ref))
+		exec(checkoutTreeCmd)
+
+		// Create tag on subtree split
+		fmt.Printf("> create tag on project %s\n", p.Name)
+		createTagCmd := newCommand(fmt.Sprintf("git tag -m %s -a %s", tag, tag))
+		exec(createTagCmd)
+
+		// Add project remote with its' git-url
+		fmt.Printf("> add remote %s\n", p.Name)
+		addRemoteCmd := newCommand(
+			fmt.Sprintf("git remote add %s %s", p.Name, p.GitUrl),
+			cmd.WithStandardStreams)
+		exec(addRemoteCmd)
+
+		// Push project from the split branch to the configured branch
+		fmt.Printf("> push project %s\n", p.Name)
+		pushCmd := newCommand(
+			fmt.Sprintf("git push %s %s %s", forceFlag, p.Name, tag),
+			cmd.WithStandardStreams)
+		exec(pushCmd)
+
+		// Remove created project remote
+		fmt.Printf("> remove remote %s\n", p.Name)
+		delCmd := newCommand(fmt.Sprintf("git remote rm %s", p.Name), cmd.WithStandardStreams)
+		exec(delCmd)
+
+		// Remove split branch
+		fmt.Printf("> remove tag %s\n", tag)
+		delBranchCmd := newCommand(fmt.Sprintf("git tag -d %s", tag), cmd.WithStandardStreams)
+		exec(delBranchCmd)
+
+		// Checkout tag commit on the monorepo. This is needed that the next split can be created and checked out.
+		fmt.Printf("> checkout monorepo ref %s", tagCommitHash)
+		resetTreeCmd := newCommand(fmt.Sprintf("git checkout %s", tagCommitHash))
+		exec(resetTreeCmd)
+
+		// Print empty line
+		fmt.Println()
 	}
 
-	fmt.Printf("> Create tags on subtrees")
-	for _, p := range m.Projects {
-		p.Exec(fmt.Sprintf("git tag %s", tag))
-	}
+	fmt.Printf("> fetch origin tags\n")
+	fetchTags := newCommand("git fetch origin")
+	exec(fetchTags)
 
-	fmt.Printf("> Push subtree tags")
-	for _, p := range m.Projects {
-		p.Exec(fmt.Sprintf("git push %s origin %s", forceFlag, tag))
-	}
+	fmt.Printf("> valiate tag syncing on subtrees\n")
+	// Validate sync and check if all tags were created and synced
+	m.Exec("git fetch origin")
+	m.Exec(fmt.Sprintf("git rev-list -n 1 %s", tag))
 }
 
 // SplitProject splits the project and returns the hash or branch name

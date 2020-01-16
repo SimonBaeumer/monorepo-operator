@@ -1,9 +1,9 @@
 > Exec subtree1
-Your Name, you@example.com - Release subtrees/subtree1 v1.0.0-test, NAMES: HEAD, tag: v1.0.0-test, origin/master, master
+Your Name, you@example.com - Release subtrees/subtree1 v1.0.0-test, NAMES: HEAD -> master, tag: v1.0.0-test, origin/master
 M	README.md
 > Exec subtree2
-Your Name, you@example.com - Release subtrees/subtree2 v1.0.0-test, NAMES: HEAD, tag: v1.0.0-test, origin/master, master
+Your Name, you@example.com - Release subtrees/subtree2 v1.0.0-test, NAMES: HEAD -> master, tag: v1.0.0-test, origin/master
 M	README.md
 > Exec subtree3
-Your Name, you@example.com - Release subtrees/subtree3 v1.0.0-test, NAMES: HEAD, tag: v1.0.0-test, origin/master, master
+Your Name, you@example.com - Release subtrees/subtree3 v1.0.0-test, NAMES: HEAD -> master, tag: v1.0.0-test, origin/master
 M	README.md
