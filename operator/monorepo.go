@@ -226,6 +226,10 @@ func (m *MonoRepo) SyncTag(tag string, useForce bool) {
 		resetTreeCmd := newCommand(fmt.Sprintf("git checkout %s", tagCommitHash))
 		exec(resetTreeCmd)
 	}
+
+	fmt.Printf("> recreate tag on monorepo %s", tag)
+	recreateTagCmd := newCommand(fmt.Sprintf("git tag -a %s -m %s", tag, tag))
+	exec(recreateTagCmd)
 }
 
 // SplitProject splits the project and returns the hash or branch name
