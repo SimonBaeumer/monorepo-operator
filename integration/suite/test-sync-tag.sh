@@ -30,5 +30,8 @@ git push origin v1.0.0-test
 # Sync tags
 monorepo-operator sync v1.0.0-test --tags
 
+# Fetch updates
+monorepo-operator exec git fetch origin
+
 echo "### CHECKING SYNCED TAGS"
 monorepo-operator exec "git log --name-status --pretty=format:'%an, %ae - %s, NAMES: %D' HEAD^..HEAD" | diff ./../suite/test-sync-tag-results.txt -

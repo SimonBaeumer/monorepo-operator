@@ -171,24 +171,60 @@ func (m *MonoRepo) SyncTag(tag string, useForce bool) {
 	checkLocalCmd := newCommand(fmt.Sprintf("git tag | grep %s", tag))
 	exec(checkLocalCmd)
 
+	tagCommitHashCmd := newCommand(fmt.Sprintf("git rev-list -n 1 %s", tag))
+	exec(tagCommitHashCmd)
+	tagCommitHash := tagCommitHashCmd.Stdout()
+
 	fmt.Printf("> checkout tag %s\n", tag)
 	tagCmd := newCommand(fmt.Sprintf("git checkout %s", tag), cmd.WithStandardStreams)
 	exec(tagCmd)
 
+	// Remove tag because it is not possible to create two tags with the same name
+	fmt.Printf("> remove original tag %s\n", tag)
+	rmTagCmd := newCommand(fmt.Sprintf("git tag -d %s", tag))
+	exec(rmTagCmd)
+
 	fmt.Printf("> checking out tag refs on subtrees\n")
 	for _, p := range m.Projects {
 		ref := m.SplitProject(p, "")
-		p.Exec(fmt.Sprintf("git checkout %s", ref))
-	}
+		fmt.Printf("> checkout subtree ref %s\n", p.Name)
+		checkoutTreeCmd := newCommand(fmt.Sprintf("git checkout %s", ref))
+		exec(checkoutTreeCmd)
 
-	fmt.Printf("> Create tags on subtrees\n")
-	for _, p := range m.Projects {
-		p.Exec(fmt.Sprintf("git tag %s", tag))
-	}
+		fmt.Printf("> create tag on project %s\n", p.Name)
+		createTagCmd := newCommand(fmt.Sprintf("git tag -m %s -a %s", tag, tag))
+		exec(createTagCmd)
 
-	fmt.Printf("> Push subtree tags\n")
-	for _, p := range m.Projects {
-		p.Exec(fmt.Sprintf("git push %s origin %s", forceFlag, tag))
+		// Add project remote with its' git-url
+		fmt.Printf("> add remote %s\n", p.Name)
+		addRemoteCmd := newCommand(
+			fmt.Sprintf("git remote add %s %s", p.Name, p.GitUrl),
+			cmd.WithStandardStreams)
+		exec(addRemoteCmd)
+
+		// Push project from the split branch to the configured branch
+		fmt.Printf("> push project %s\n", p.Name)
+		pushCmd := newCommand(
+			fmt.Sprintf("git push %s %s %s", forceFlag, p.Name, tag),
+			cmd.WithStandardStreams)
+		exec(pushCmd)
+
+		// Remove created project remote
+		fmt.Printf("> remove remote %s\n", p.Name)
+		delCmd := newCommand(fmt.Sprintf("git remote rm %s", p.Name), cmd.WithStandardStreams)
+		exec(delCmd)
+
+		// Remove split branch
+		fmt.Printf("> remove tag %s\n", tag)
+		delBranchCmd := newCommand(fmt.Sprintf("git tag -d %s", tag), cmd.WithStandardStreams)
+		exec(delBranchCmd)
+
+		// Print empty line
+		fmt.Println()
+
+		fmt.Printf("> checkout monorepo ref %s", tagCommitHash)
+		resetTreeCmd := newCommand(fmt.Sprintf("git checkout %s", tagCommitHash))
+		exec(resetTreeCmd)
 	}
 }
 
