@@ -22,7 +22,7 @@ var listCmd = &cobra.Command{
 		header := []string{"name", "path", "git-url"}
 		list := [][]string{}
 		for _, p := range m.Projects {
-			list = append([][]string{[]string{p.Name, p.Path, p.GitUrl}})
+			list = append(list, []string{p.Name, p.Path, p.GitUrl})
 		}
 
 		table := tablewriter.NewWriter(os.Stdout)

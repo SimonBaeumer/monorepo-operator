@@ -8,6 +8,7 @@ A tool for managing monolithic repositories with subtree splits.
 * [Quick start](#quick-start)
   + [Requirements](#requirements)
   + [Usage](#usage)
+    - [list](#list)
     - [clone](#clone)
     - [sync](#sync)
     - [exec](#exec)
@@ -112,7 +113,21 @@ Deleted branch repo02-testing (was 8fbf026).
  - `windows`, `osx` or `linux`
  
 ### Usage
- 
+
+#### list
+
+`list` displays an overview of all projects which are managed by the `monorepo-operator`.
+
+```bash
+$ ./monorepo-operator --config _examples/.monorepo-operator.yml list
++--------+----------------+------------------------------------+
+|  NAME  |      PATH      |              GIT-URL               |
++--------+----------------+------------------------------------+
+| repo01 | plugins/repo01 | git@github.com:SimonBaeumer/repo01 |
+| repo02 | plugins/repo02 | git@github.com:SimonBaeumer/repo02 |
++--------+----------------+------------------------------------+
+```
+
 #### clone
 
 `clone` clones all projects into the specified `operating-directory`.
@@ -230,7 +245,7 @@ Optionally you can define a directory which is scanned and creates for every dir
 
 ```yaml
 projects:
-- name: {{.DirName}}
+- name: "{{.DirName}}"
   path: projects
   git-url: git@github.com/UserName/{{.DirName}}.git
   is-dir: true

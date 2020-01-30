@@ -15,7 +15,7 @@ type Project struct {
 	// OperatingPath defines the path to the checked out repository, located in the mono-repos` operating dir
 	OperatingPath string `yaml:"operating-path,omitempty"`
 	GitUrl        string `yaml:"git-url"`
-	IsDir         bool   `yaml:"is-dir"`
+	IsDir         bool   `yaml:"is-dir,omitempty"`
 }
 
 // GitClone clones the project into the given destination path
