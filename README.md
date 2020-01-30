@@ -226,6 +226,16 @@ projects:
 operating-directory: .git/.subtree-repos
 ```
 
+Optionally you can define a directory which is scanned and creates for every directory a project:
+
+```yaml
+projects:
+- name: {{.DirName}}
+  path: projects
+  git-url: git@github.com/UserName/{{.DirName}}.git
+  is-dir: true
+```
+
 ## Development
 
 ### Build targets

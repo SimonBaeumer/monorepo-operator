@@ -1,6 +1,8 @@
 package operator
 
 import (
+	"fmt"
+	"github.com/SimonBaeumer/cmd"
 	"github.com/stretchr/testify/assert"
 	"io/ioutil"
 	"os"
@@ -117,4 +119,31 @@ func Test_MonoRepo_Exec(t *testing.T) {
 	for _, p := range m.Projects {
 		assert.FileExists(t, path.Join(p.OperatingPath, "test"))
 	}
+}
+
+func TestNewMonoRepo_WithDirProject(t *testing.T) {
+	f, _ := ioutil.TempFile("/tmp", "tmp_config_monorepo")
+	defer os.Remove(f.Name())
+	d, _ := ioutil.TempDir("/tmp", "tmp_monorepo")
+	defer exec(cmd.NewCommand(fmt.Sprintf("rm -rf %s", d)))
+
+	os.Mkdir(d+"/repo01", 0777)
+	os.Mkdir(d+"/repo02", 0777)
+	ioutil.WriteFile(d+"/test_file", []byte(``), 0777)
+
+	config := fmt.Sprintf(`
+projects:
+- name: "{{.DirName}}"
+  path: %s
+  giturl: https://github.com/SimonBaeumer/{{.DirName}}
+  is-dir: true
+operating-directory: %s/operating-dir
+`, d, d)
+
+	_ = ioutil.WriteFile(f.Name(), []byte(config), 0755)
+	m, err := NewMonoRepo(f.Name())
+
+	assert.Nil(t, err)
+	assert.Len(t, m.Projects, 2)
+	assert.Equal(t, m.OperatingDir, fmt.Sprintf("%s/operating-dir", d))
 }
