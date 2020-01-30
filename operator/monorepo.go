@@ -1,18 +1,25 @@
 package operator
 
 import (
+	"bytes"
 	"fmt"
 	"github.com/SimonBaeumer/cmd"
 	"gopkg.in/yaml.v2"
+	"html/template"
 	"io/ioutil"
 	"log"
 	"os"
 	"path"
+	"path/filepath"
 )
 
 type MonoRepo struct {
 	Projects     []Project `yaml:"projects"`
 	OperatingDir string    `yaml:"operating-directory"`
+}
+
+type TemplateMetadata struct {
+	DirName string
 }
 
 // NewMonoRepo creates a new instance with the content from the given config file
@@ -25,11 +32,58 @@ func NewMonoRepo(config string) (*MonoRepo, error) {
 		return m, err
 	}
 
-	for i, p := range m.Projects {
-		m.Projects[i].OperatingPath = path.Join(m.OperatingDir, p.Name)
+	projects := []Project{}
+	for _, p := range m.Projects {
+		if !p.IsDir {
+			projects = append(projects, p)
+			continue
+		}
+
+		pFromDir := readProjectsFromDirectory(p)
+		projects = append(projects, pFromDir...)
 	}
 
+	for i, p := range projects {
+		projects[i].OperatingPath = path.Join(m.OperatingDir, p.Name)
+	}
+
+	m.Projects = projects
+
 	return m, nil
+}
+
+func renderTmpl(data TemplateMetadata, text string) string {
+	w := &bytes.Buffer{}
+	tpl, _ := template.New("").Parse(text)
+	if err := tpl.Execute(w, data); err != nil {
+		log.Fatal(err)
+	}
+
+	return w.String()
+}
+
+// read projects from a directory
+func readProjectsFromDirectory(project Project) []Project {
+	files, _ := ioutil.ReadDir(project.Path)
+
+	var result []Project
+	for _, f := range files {
+		if !f.IsDir() {
+			continue
+		}
+
+		tplData := TemplateMetadata{DirName: filepath.Base(f.Name())}
+
+		p := Project{
+			Name:   renderTmpl(tplData, project.Name),
+			GitUrl: renderTmpl(tplData, project.GitUrl),
+			IsDir:  project.IsDir,
+			Path:   renderTmpl(tplData, project.Path),
+		}
+		result = append(result, p)
+	}
+
+	return result
 }
 
 // NewMonoRepoFromPath will initialize all directories under a specified path

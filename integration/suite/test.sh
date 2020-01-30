@@ -7,3 +7,4 @@ set -e
 ./../suite/test-sync-tag.sh
 ./../suite/test-remove-branches.sh
 ./../suite/test-clone.sh
+./../suite/test-directory.sh
