@@ -23,11 +23,15 @@ type TemplateMetadata struct {
 }
 
 // NewMonoRepo creates a new instance with the content from the given config file
-func NewMonoRepo(config string) (*MonoRepo, error) {
+func NewMonoRepo(configPath string) (*MonoRepo, error) {
 	m := &MonoRepo{}
+	configPath, err := filepath.Abs(configPath)
+	if err != nil {
+		log.Fatal(err)
+	}
 
-	out, _ := ioutil.ReadFile(config)
-	err := yaml.Unmarshal(out, m)
+	out, _ := ioutil.ReadFile(configPath)
+	err = yaml.Unmarshal(out, m)
 	if err != nil {
 		return m, err
 	}
@@ -39,7 +43,7 @@ func NewMonoRepo(config string) (*MonoRepo, error) {
 			continue
 		}
 
-		pFromDir := readProjectsFromDirectory(p)
+		pFromDir := readProjectsFromDirectory(p, configPath)
 		projects = append(projects, pFromDir...)
 	}
 
@@ -63,8 +67,12 @@ func renderTmpl(data TemplateMetadata, text string) string {
 }
 
 // read projects from a directory
-func readProjectsFromDirectory(project Project) []Project {
-	files, _ := ioutil.ReadDir(project.Path)
+func readProjectsFromDirectory(project Project, configPath string) []Project {
+	dirPath := path.Join(path.Dir(configPath), project.Path)
+	files, err := ioutil.ReadDir(dirPath)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	var result []Project
 	for _, f := range files {
@@ -78,7 +86,7 @@ func readProjectsFromDirectory(project Project) []Project {
 			Name:   renderTmpl(tplData, project.Name),
 			GitUrl: renderTmpl(tplData, project.GitUrl),
 			IsDir:  project.IsDir,
-			Path:   renderTmpl(tplData, project.Path),
+			Path:   path.Join(project.Path, f.Name()),
 		}
 		result = append(result, p)
 	}

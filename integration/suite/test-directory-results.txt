@@ -1,8 +1,7 @@
-+-------------+-------------+---------------------------------------+
-|    NAME     |    PATH     |                GIT-URL                |
-+-------------+-------------+---------------------------------------+
-| subtree1    | subtrees    | root@git-server:/srv/git/subtree1.git |
-| subtree2    | subtrees    | root@git-server:/srv/git/subtree2.git |
-| subtree3    | subtrees    | root@git-server:/srv/git/subtree3.git |
-| manual-repo | /tmp/manual | root@git-server:/srv/git/manual.git   |
-+-------------+-------------+---------------------------------------+
++----------+-------------------+---------------------------------------+
+|   NAME   |       PATH        |                GIT-URL                |
++----------+-------------------+---------------------------------------+
+| subtree1 | subtrees/subtree1 | root@git-server:/srv/git/subtree1.git |
+| subtree2 | subtrees/subtree2 | root@git-server:/srv/git/subtree2.git |
+| subtree3 | subtrees/subtree3 | root@git-server:/srv/git/subtree3.git |
++----------+-------------------+---------------------------------------+
