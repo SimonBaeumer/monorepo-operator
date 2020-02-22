@@ -4,7 +4,7 @@ VERSION ?= "0.0.0"
 BUILD_NUMBER ?= dev
 REF ?= dev
 
-.PHONY: deps lint test integration integration-windows git-hooks init docker-image docker-push
+.PHONY: deps lint test test-integration git-hooks init docker-image docker-push
 
 init: git-hooks
 

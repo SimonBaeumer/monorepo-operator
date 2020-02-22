@@ -1,0 +1,9 @@
+projects:
+  - name: test
+    path: test
+    git-url: git@github.com
+
+  - name: "{{.DirName}}"
+    path: dir
+    git-url: git@github.com/SimonBaeumer/{{.DirName}}.git
+    is-dir: true
