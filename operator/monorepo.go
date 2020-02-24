@@ -17,7 +17,7 @@ import (
 type MonoRepo struct {
 	Projects          []Project `yaml:"projects"`
 	OperatingDir      string    `yaml:"operating-directory"`
-	ProtectedBranches []string  `yaml:"protected-branches"`
+	ProtectedBranches []string  `yaml:"protected-branches,omitempty"`
 }
 
 type TemplateMetadata struct {
@@ -182,58 +182,58 @@ func (m *MonoRepo) Sync(branch string, useForce bool) {
 	}
 
 	// Disable force pushing if branch is a protected branch
-    if m.isProtectedBranches(branch) {
-        forceFlag = ""
-    }
+	if m.isProtectedBranches(branch) {
+		forceFlag = ""
+	}
 
-    for _, p := range m.Projects {
-        splitBranch := fmt.Sprintf("%s-%s", p.Name, branch)
+	for _, p := range m.Projects {
+		splitBranch := fmt.Sprintf("%s-%s", p.Name, branch)
 
-        // Split project
-        fmt.Printf("> split project %s in branch %s\n", p.Name, splitBranch)
-        m.SplitProject(p, splitBranch)
+		// Split project
+		fmt.Printf("> split project %s in branch %s\n", p.Name, splitBranch)
+		m.SplitProject(p, splitBranch)
 
-        // Add project remote with its' git-url
-        fmt.Printf("> add remote %s\n", p.Name)
-        addRemoteCmd := newCommand(
-            fmt.Sprintf("git remote add %s %s", p.Name, p.GitUrl),
-            cmd.WithStandardStreams)
-        exec(addRemoteCmd)
+		// Add project remote with its' git-url
+		fmt.Printf("> add remote %s\n", p.Name)
+		addRemoteCmd := newCommand(
+			fmt.Sprintf("git remote add %s %s", p.Name, p.GitUrl),
+			cmd.WithStandardStreams)
+		exec(addRemoteCmd)
 
-        // Push project from the split branch to the configured branch
-        fmt.Printf("> push project %s\n", p.Name)
-        pushCmd := newCommand(
-            fmt.Sprintf("git push %s %s %s:%s", forceFlag, p.Name, splitBranch, branch),
-            cmd.WithStandardStreams)
-        exec(pushCmd)
+		// Push project from the split branch to the configured branch
+		fmt.Printf("> push project %s\n", p.Name)
+		pushCmd := newCommand(
+			fmt.Sprintf("git push %s %s %s:%s", forceFlag, p.Name, splitBranch, branch),
+			cmd.WithStandardStreams)
+		exec(pushCmd)
 
-        // Remove created project remote
-        fmt.Printf("> remove remote %s\n", p.Name)
-        delCmd := newCommand(fmt.Sprintf("git remote rm %s", p.Name), cmd.WithStandardStreams)
-        exec(delCmd)
+		// Remove created project remote
+		fmt.Printf("> remove remote %s\n", p.Name)
+		delCmd := newCommand(fmt.Sprintf("git remote rm %s", p.Name), cmd.WithStandardStreams)
+		exec(delCmd)
 
-        // Remove split branch
-        fmt.Printf("> remove branch %s\n", splitBranch)
-        delBranchCmd := newCommand(fmt.Sprintf("git branch -D %s", splitBranch), cmd.WithStandardStreams)
-        exec(delBranchCmd)
+		// Remove split branch
+		fmt.Printf("> remove branch %s\n", splitBranch)
+		delBranchCmd := newCommand(fmt.Sprintf("git branch -D %s", splitBranch), cmd.WithStandardStreams)
+		exec(delBranchCmd)
 
-        // Print empty line
-        fmt.Println()
-    }
+		// Print empty line
+		fmt.Println()
+	}
 }
 
 func (m *MonoRepo) isProtectedBranches(branch string) bool {
-    for _, b := range m.ProtectedBranches {
-        matched, err := regexp.Match(b, []byte(branch))
-        if err != nil {
-            log.Fatal(err)
-        }
+	for _, b := range m.ProtectedBranches {
+		matched, err := regexp.Match(b, []byte(branch))
+		if err != nil {
+			log.Fatal(err)
+		}
 
-        if matched {
-            return true
-        }
-    }
-    return false
+		if matched {
+			return true
+		}
+	}
+	return false
 }
 
 func (m *MonoRepo) SyncTag(tag string, useForce bool) {
