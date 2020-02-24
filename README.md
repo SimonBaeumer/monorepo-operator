@@ -235,6 +235,11 @@ projects:
 - name: project02
   path: projects/project02
   git-url: git@github.com:UserName/project02.git
+  
+# Provide regexes for branches which should be excluded if the sync uses force pushes
+protected:
+  - master
+  - \d{0,9}\.\p{N}\d{0,9}\.\p{N}\d{0,9}
 
 # operating-directory stores the original repositories with the git configs
 # the exec command executes all commands on all directories located under the operating dir
