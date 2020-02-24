@@ -118,3 +118,14 @@ func Test_MonoRepo_Exec(t *testing.T) {
 		assert.FileExists(t, path.Join(p.OperatingPath, "test"))
 	}
 }
+
+func TestMonoRepo_isProtectedBranch(t *testing.T) {
+	m := MonoRepo{}
+	m.ProtectedBranches = []string{"master", `\d{0,9}\.\p{N}\d{0,9}\.\p{N}\d{0,9}`}
+
+	assert.True(t, m.isProtectedBranches("master"))
+	assert.True(t, m.isProtectedBranches("1.1.1"))
+	assert.True(t, m.isProtectedBranches("2.0.0"))
+	assert.False(t, m.isProtectedBranches("test"))
+	assert.False(t, m.isProtectedBranches("hello1"))
+}
